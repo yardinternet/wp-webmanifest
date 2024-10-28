@@ -14,7 +14,8 @@
     "php": "^8.0",
     "intervention/image": "^3.9",
     "spatie/laravel-data": "^4.11",
-    "spatie/laravel-package-tools": "^1.16"
+    "spatie/laravel-package-tools": "^1.16",
+    "webmozart/assert": "^1.11"
   },
   "require-dev": {
     "10up/wp_mock": "^0.4.2",

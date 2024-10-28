@@ -21,6 +21,14 @@ class WebManifestData extends Data
     #[Computed]
     public string $start_url;
 
+    /**
+     * Web app manifests data
+     *
+     * @param string $display
+     * @param bool $prefer_related_applications
+     * @param string $orientation
+     * @param array<int, WebmanifestIconData> $icons
+     */
     public function __construct(
         public string $display,
         public bool $prefer_related_applications,

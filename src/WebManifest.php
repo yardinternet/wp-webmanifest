@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yard\WebmanifestGenerator;
 
+use Webmozart\Assert\Assert;
 use Yard\WebmanifestGenerator\Data\WebManifestData;
 use Yard\WebmanifestGenerator\Data\WebmanifestIconData;
 use Yard\WebmanifestGenerator\Traits\Helpers;
@@ -53,22 +54,26 @@ class WebManifest
         $this->webmanifestData->icons = []; // reset icon list
 
         foreach ($this->getConfigList('webmanifest-generator.iconSizes') as $size) {
-            $sizeInt = intval($size);
+            Assert::integer($size);
 
-            $icon = $this->maskableIcon->getBase64Icon($sizeInt);
+            $icon = $this->maskableIcon->getBase64Icon($size);
 
             if (false === $icon) {
-                $icon = $this->maskableIcon->createBase64Icon($sizeInt, $favicon);
+                $icon = $this->maskableIcon->createBase64Icon($size, $favicon);
             }
 
 
-            $this->webmanifestData->addIcon(new WebmanifestIconData($icon, "{$sizeInt}x{$sizeInt}", 'image/jpeg'));
+            $this->webmanifestData->addIcon(new WebmanifestIconData($icon, "{$size}x{$size}", 'image/jpeg'));
         }
     }
 
     private function getFavicon(): false|string
     {
-        $faviconPath = get_attached_file((int) get_option('site_icon')); // get full path to image
+        $icon = get_option('site_icon');
+
+        Assert::integer($icon);
+
+        $faviconPath = get_attached_file($icon); // get full path to image
 
         if (false === file_exists($faviconPath)) {
             return false;

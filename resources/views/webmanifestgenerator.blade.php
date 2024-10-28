@@ -1,0 +1,1 @@
+{{ WebmanifestGenerator::getQuote() }}

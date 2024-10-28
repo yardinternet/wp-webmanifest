@@ -6,8 +6,6 @@
 [![Code Coverage Badge](https://github.com/yardinternet/webmanifest-generator/blob/badges/coverage.svg)](https://github.com/yardinternet/webmanifest-generator/actions/workflows/badges.yml)
 [![Lines of Code Badge](https://github.com/yardinternet/webmanifest-generator/blob/badges/lines-of-code.svg)](https://github.com/yardinternet/webmanifest-generator/actions/workflows/badges.yml)
 
-
-
 ## Requirements
 
 - [Sage](https://github.com/roots/sage) >= 10.0
@@ -42,18 +40,4 @@ You can publish the config file with:
 
 ```shell
 wp acorn vendor:publish --provider="Yard\WebmanifestGenerator\WebmanifestGeneratorServiceProvider"
-```
-
-## Usage
-
-From a Blade template:
-
-```blade
-@include('webmanifest-generator::webmanifestgenerator')
-```
-
-From WP-CLI:
-
-```shell
-wp acorn webmanifestgenerator
 ```

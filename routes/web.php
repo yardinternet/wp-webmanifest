@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Yard\WebmanifestGenerator\WebManifest;
 
 Route::get(
-    '/' . config('webmanifest.url'),
+    '/' . config('webmanifest-generator.url'),
     function (WebManifest $webmanifest) {
         return response()->json($webmanifest->generate());
     }

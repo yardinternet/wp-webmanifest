@@ -11,7 +11,6 @@ class WebmanifestGeneratorServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
-        dd("here");
         $package
             ->name('webmanifest-generator')
             ->hasConfigFile()

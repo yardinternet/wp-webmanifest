@@ -18,7 +18,6 @@ class WebManifest
         $this->maskableIcon = new MaskableIcon();
     }
 
-
     public function generate(): array
     {
         $this->setWebmanifestData();

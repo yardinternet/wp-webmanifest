@@ -15,7 +15,6 @@ class MaskableIcon
         $this->imageManager = ImageManager::gd();
     }
 
-
     public function getBase64Icon(int $size): false|string
     {
         return get_transient($this->getTransientName($size));

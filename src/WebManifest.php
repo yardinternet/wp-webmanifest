@@ -38,19 +38,19 @@ class WebManifest
             [
                 'lang' => get_bloginfo('language'),
                 'name' => $pageName,
-                'short_name' => strlen($pageName) > 11 ? substr($pageName, 0, 8) . '...' : $pageName,
+                'shortName' => strlen($pageName) > 11 ? substr($pageName, 0, 8) . '...' : $pageName,
                 'display' => 'standalone',
                 'description' => get_bloginfo('description'),
-                'prefer_related_applications' => false,
+                'preferRelatedApplications' => false,
                 'orientation' => 'any',
-                'start_url' => get_bloginfo('url'),
+                'startUrl' => get_bloginfo('url'),
                 'icons' => [ // default icon
                     [
                         'src' => get_home_url() . '/favicon.ico',
                     ],
                 ],
-                'background_color' => $this->getConfig('background_color'),
-                'theme_color' => $this->getConfig('theme_color'),
+                'backgroundColor' => $this->getConfig('background_color'),
+                'themeColor' => $this->getConfig('theme_color'),
             ]
         );
     }

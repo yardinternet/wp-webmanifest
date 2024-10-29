@@ -5,20 +5,26 @@ declare(strict_types=1);
 namespace Yard\Webmanifest\Data;
 
 use Illuminate\Support\Collection;
+use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Data;
 
 class WebManifestData extends Data
 {
     public string $lang;
     public string $name;
-    public string $short_name;
+    #[MapOutputName('short_name')]
+    public string $shortName;
     public string $description;
-    public string $start_url;
+    #[MapOutputName('start_url')]
+    public string $startUrl;
     public string $display;
-    public bool $prefer_related_applications;
+    #[MapOutputName('prefer_related_applications')]
+    public bool $preferRelatedApplications;
     public string $orientation;
     /** @var Collection<int, WebmanifestIconData> */
     public Collection $icons;
-    public string $background_color;
-    public string $theme_color;
+    #[MapOutputName('background_color')]
+    public string $backgroundColor;
+    #[MapOutputName('theme_color')]
+    public string $themeColor;
 }

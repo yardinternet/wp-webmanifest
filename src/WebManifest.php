@@ -11,109 +11,107 @@ use Yard\Webmanifest\Traits\Helpers;
 
 class WebManifest
 {
-    use Helpers;
+	use Helpers;
 
-    private WebManifestData $webmanifestData;
+	private WebManifestData $webmanifestData;
 
-    public function __construct(private MaskableIcon $maskableIcon)
-    {
-    }
+	public function __construct(private MaskableIcon $maskableIcon)
+	{
+	}
 
-    public function generate(): string
-    {
-        $this->setManifestData();
+	public function generate(): string
+	{
+		$this->setManifestData();
 
-        if (0 < count($this->getConfigList('icons', []))) {
-            $this->setConfiguredManifestIcons();
-        } elseif (true === has_site_icon()) {
-            $this->setFaviconManifestIcons();
-        }
+		if (0 < count($this->getConfigList('icons', []))) {
+			$this->setConfiguredManifestIcons();
+		} elseif (true === has_site_icon()) {
+			$this->setFaviconManifestIcons();
+		}
 
-        return $this->webmanifestData->toJson();
-    }
+		return $this->webmanifestData->toJson();
+	}
 
-    private function setManifestData(): void
-    {
-        $pageName = get_bloginfo('name');
+	private function setManifestData(): void
+	{
+		$pageName = get_bloginfo('name');
 
+		$webmanifest = [
+			'lang' => get_bloginfo('language'),
+			'name' => $pageName,
+			'shortName' => strlen($pageName) > 11 ? substr($pageName, 0, 8) . '...' : $pageName,
+			'display' => 'standalone',
+			'description' => get_bloginfo('description'),
+			'preferRelatedApplications' => false,
+			'orientation' => 'any',
+			'startUrl' => get_bloginfo('url'),
+			'icons' => [ // default icon
+				[
+					'src' => get_home_url() . '/favicon.ico',
+				],
+			],
+		];
 
-        $webmanifest = [
-            'lang' => get_bloginfo('language'),
-            'name' => $pageName,
-            'shortName' => strlen($pageName) > 11 ? substr($pageName, 0, 8) . '...' : $pageName,
-            'display' => 'standalone',
-            'description' => get_bloginfo('description'),
-            'preferRelatedApplications' => false,
-            'orientation' => 'any',
-            'startUrl' => get_bloginfo('url'),
-            'icons' => [ // default icon
-                [
-                    'src' => get_home_url() . '/favicon.ico',
-                ],
-            ],
-        ];
+		if ('' !== $this->getConfig('background_color')) {
+			$webmanifest['backgroundColor'] = $this->getConfig('background_color');
+		}
 
-        if ('' !== $this->getConfig('background_color')) {
-            $webmanifest['backgroundColor'] = $this->getConfig('background_color');
-        }
+		if ('' !== $this->getConfig('themeColor')) {
+			$webmanifest['themeColor'] = $this->getConfig('themeColor');
+		}
 
-        if ('' !== $this->getConfig('theme_color')) {
-            $webmanifest['themeColor'] = $this->getConfig('theme_color');
-        }
+		$this->webmanifestData = WebManifestData::from(
+			$webmanifest
+		);
+	}
 
+	private function setConfiguredManifestIcons(): void
+	{
+		$this->webmanifestData->icons = collect(); // reset icon list
 
-        $this->webmanifestData = WebManifestData::from(
-            $webmanifest
-        );
-    }
+		foreach ($this->getConfigList('icons') as $icon) {
+			$this->webmanifestData->icons->push(WebmanifestIconData::from($icon));
+		}
+	}
 
-    private function setConfiguredManifestIcons(): void
-    {
-        $this->webmanifestData->icons = collect(); // reset icon list
+	private function setFaviconManifestIcons(): void
+	{
+		$favicon = $this->getFavicon();
 
-        foreach ($this->getConfigList('icons') as $icon) {
-            $this->webmanifestData->icons->push(WebmanifestIconData::from($icon));
-        }
-    }
+		if ('' === $favicon) {
+			return;
+		}
 
-    private function setFaviconManifestIcons(): void
-    {
-        $favicon = $this->getFavicon();
+		$this->webmanifestData->icons = collect(); // reset icon list
 
-        if ('' === $favicon) {
-            return;
-        }
+		foreach ($this->getConfigList('iconSizes') as $size) {
+			Assert::integer($size);
 
-        $this->webmanifestData->icons = collect(); // reset icon list
+			$icon = $this->maskableIcon->getBase64Icon($size);
 
-        foreach ($this->getConfigList('iconSizes') as $size) {
-            Assert::integer($size);
+			if ('' === $icon) {
+				$icon = $this->maskableIcon->createBase64Icon($size, $favicon);
+			}
 
-            $icon = $this->maskableIcon->getBase64Icon($size);
+			$this->webmanifestData->icons->push(WebmanifestIconData::from([
+				'src' => $icon,
+				'sizes' => "{$size}x{$size}",
+				'type' => 'image/png',
+			]));
+		}
+	}
 
-            if ('' === $icon) {
-                $icon = $this->maskableIcon->createBase64Icon($size, $favicon);
-            }
+	private function getFavicon(): string
+	{
+		/** @phpstan-ignore-next-line */
+		$icon = intval(get_option('site_icon'));
 
-            $this->webmanifestData->icons->push(WebmanifestIconData::from([
-                'src' => $icon,
-                'sizes' => "{$size}x{$size}",
-                'type' => 'image/png',
-            ]));
-        }
-    }
+		$faviconPath = get_attached_file($icon); // get full path to image
 
-    private function getFavicon(): string
-    {
-        /** @phpstan-ignore-next-line */
-        $icon = intval(get_option('site_icon'));
+		if (false === $faviconPath || false === file_exists($faviconPath)) {
+			return '';
+		}
 
-        $faviconPath = get_attached_file($icon); // get full path to image
-
-        if (false === $faviconPath || false === file_exists($faviconPath)) {
-            return '';
-        }
-
-        return file_get_contents($faviconPath) ?: '';
-    }
+		return file_get_contents($faviconPath) ?: '';
+	}
 }

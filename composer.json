@@ -2,7 +2,6 @@
   "name": "yard/webmanifest",
   "type": "package",
   "description": "Creates web app manifests",
-  "version": "1.0.0",
   "license": "MIT",
   "config": {
     "sort-packages": true,

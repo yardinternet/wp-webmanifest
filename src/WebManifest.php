@@ -103,7 +103,6 @@ class WebManifest
 
 	private function getFavicon(): string
 	{
-		/** @phpstan-ignore-next-line */
 		$icon = intval(get_option('site_icon'));
 
 		$faviconPath = get_attached_file($icon); // get full path to image

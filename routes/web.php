@@ -11,6 +11,6 @@ Route::get(
 		return response($webmanifest->generate(), 200)->
 			header('Content-Type', 'application/json');
 	}
-);
+)->name('webmanifest.manifest');
 
-Route::get(config('webmanifest.iconUrl'), [\Yard\Webmanifest\Http\Controllers\IconController::class, 'index']);
+Route::get(config('webmanifest.iconUrl').'/{iconName}', [\Yard\Webmanifest\Http\Controllers\IconController::class, 'index'])->name('webmanifest.icon.route');

@@ -32,7 +32,7 @@ class WebmanifestServiceProvider extends PackageServiceProvider
 
 	public function addManifestLinkToHead(): void
 	{
-		$manifestPath = config('webmanifest.url');
+		$manifestPath = route('webmanifest.manifest');
 
 		echo "<link rel='manifest' href='{$manifestPath}'>\n";
 	}

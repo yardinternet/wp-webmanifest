@@ -40,10 +40,20 @@ class IconData extends Data
 
 	public static function fromFileName(string $fileName): ?self
 	{
+		return IconData::from(IconData::explodeFileName($fileName));
+	}
+
+	/**
+	 * @param string $fileName
+	 *
+	 * @return array<string, string>
+	 */
+	private static function explodeFileName(string $fileName): array
+	{
 		$iconNameAndsuffix = explode('_', $fileName);
 
 		if (2 !== count($iconNameAndsuffix)) {
-			return null;
+			return [];
 		}
 
 		Assert::string($iconNameAndsuffix[1]);
@@ -51,13 +61,13 @@ class IconData extends Data
 		$sizeAndExtension = explode('.', $iconNameAndsuffix[1]);
 
 		if (2 !== count($sizeAndExtension)) {
-			return null;
+			return [];
 		}
 
-		return IconData::from([
+		return [
 			'name' => $iconNameAndsuffix[0],
 			'size' => $sizeAndExtension[0],
 			'extension' => $sizeAndExtension[1],
-		]);
+		];
 	}
 }

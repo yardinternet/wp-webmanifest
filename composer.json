@@ -9,11 +9,11 @@
       "pestphp/pest-plugin": true
     },
     "platform": {
-      "php": "8.1"
+      "php": "8.2"
     }
   },
   "require": {
-    "php": ">=8.1",
+    "php": ">=8.2",
     "intervention/image": "^3.9",
     "spatie/laravel-data": "^4.11",
     "spatie/laravel-package-tools": "^1.16",

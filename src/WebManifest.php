@@ -21,7 +21,7 @@ class WebManifest
 
 		if (0 < count($this->getConfigList('icons', []))) {
 			$this->setConfiguredManifestIcons();
-		} elseif (true === has_site_icon()) {
+		} elseif (true === has_site_icon() && true === $this->hasSupportedSiteIcon()) {
 			$this->setFaviconManifestIcons();
 		}
 
@@ -70,13 +70,26 @@ class WebManifest
 		}
 	}
 
+	/**
+	 * Maskable icons are generated from the site icon, which only works for raster formats.
+	 * Otherwise the default favicon.ico is kept instead of listing icon urls that can't be served.
+     *
+     * @since NEXT
+	 */
+	private function hasSupportedSiteIcon(): bool
+	{
+		$mimeType = get_post_mime_type(intval(get_option('site_icon')));
+
+		return is_string($mimeType) && MaskableIcon::supportsMimeType($mimeType);
+	}
+
 	private function setFaviconManifestIcons(): void
 	{
 		$icons = IconData::fromConfiguredSizes();
 
 		$this->webmanifestData->icons = $icons->map(function (IconData $icon) {
 			return WebmanifestIconData::from([
-				'src' => route('webmanifest.icon', $icon->getFileName()),
+				'src' => route('webmanifest.icon', $icon->getUrlName()),
 				'sizes' => "{$icon->size}x{$icon->size}",
 				'type' => MaskableIcon::IMAGE_TYPE['mime'],
 			]);

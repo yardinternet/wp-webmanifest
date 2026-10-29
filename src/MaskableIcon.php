@@ -14,8 +14,28 @@ class MaskableIcon
 		'extension' => 'png',
 	];
 
+	/**
+	 * Source formats the GD driver can decode. Vector (SVG) and ICO site icons are not supported.
+	 */
+	const SUPPORTED_SOURCE_MIMES = [
+		'image/png',
+		'image/jpeg',
+		'image/gif',
+		'image/webp',
+		'image/avif',
+		'image/bmp',
+	];
+
 	public function __construct(private ImageManager $imageManager)
 	{
+	}
+
+    /**
+     * @since NEXT
+     */
+	public static function supportsMimeType(string $mimeType): bool
+	{
+		return in_array($mimeType, self::SUPPORTED_SOURCE_MIMES, true);
 	}
 
 	public function getBase64Icon(IconData $iconData): string
@@ -36,7 +56,7 @@ class MaskableIcon
 
 	private function makeIconMaskable(int $size, string $originalIcon): string
 	{
-		// add 40% padding
+		// Add padding.
 		$newIconSize = (int) round($size - ($size * 0.4));
 
 		// load and shrink icon

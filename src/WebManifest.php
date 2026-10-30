@@ -76,7 +76,7 @@ class WebManifest
 
 		$this->webmanifestData->icons = $icons->map(function (IconData $icon) {
 			return WebmanifestIconData::from([
-				'src' => route('webmanifest.icon', $icon->getFileName()),
+				'src' => route('webmanifest.icon', $icon->getUrlName()),
 				'sizes' => "{$icon->size}x{$icon->size}",
 				'type' => MaskableIcon::IMAGE_TYPE['mime'],
 			]);

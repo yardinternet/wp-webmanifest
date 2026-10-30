@@ -38,6 +38,15 @@ class IconData extends Data
 		return "{$this->name}_{$this->size}.{$this->extension}";
 	}
 
+	/**
+	 * Name used in the icon url. Without extension, so webserver rules for static files
+	 * (e.g. nginx locations matching *.png) don't intercept the dynamically generated icon.
+	 */
+	public function getUrlName(): string
+	{
+		return "{$this->name}_{$this->size}";
+	}
+
 	public static function fromFileName(string $fileName): ?self
 	{
 		return IconData::from(IconData::explodeFileName($fileName));
@@ -46,7 +55,7 @@ class IconData extends Data
 	/**
 	 * @param string $fileName
 	 *
-	 * @return array<string, string>
+	 * @return array<string, int|string>
 	 */
 	private static function explodeFileName(string $fileName): array
 	{
@@ -60,14 +69,27 @@ class IconData extends Data
 
 		$sizeAndExtension = explode('.', $iconNameAndsuffix[1]);
 
-		if (2 !== count($sizeAndExtension)) {
+		// url name without extension (e.g. icon_192) or file name with extension (e.g. icon_192.png)
+		if (1 !== count($sizeAndExtension) && 2 !== count($sizeAndExtension)) {
 			return [];
 		}
 
-		return [
+		// reject non-numeric or out-of-range sizes, which would fail hydration of the int property
+		$size = filter_var($sizeAndExtension[0], FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+
+		if (false === $size) {
+			return [];
+		}
+
+		$data = [
 			'name' => $iconNameAndsuffix[0],
-			'size' => $sizeAndExtension[0],
-			'extension' => $sizeAndExtension[1],
+			'size' => $size,
 		];
+
+		if (isset($sizeAndExtension[1])) {
+			$data['extension'] = $sizeAndExtension[1];
+		}
+
+		return $data;
 	}
 }

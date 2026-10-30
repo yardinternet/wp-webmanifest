@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yard\Webmanifest\Traits;
 
-use Illuminate\View\View;
+use Illuminate\Http\Response;
 
 trait Helpers
 {
@@ -35,7 +35,7 @@ trait Helpers
 		return config("webmanifest.{$configItem}");
 	}
 
-	private function dieAndNotFound(): View
+	private function dieAndNotFound(): Response
 	{
 		global $wp_query;
 		$wp_query->set_404();
@@ -43,7 +43,8 @@ trait Helpers
 
 		// @phpstan-ignore-next-line
 		if (view()->exists('404')) {
-			return view('404');
+			// Explicit status, otherwise a plain view is converted to a 200 response.
+			return response(view('404'), 404);
 		} else {
 			die();
 		}

@@ -1,6 +1,6 @@
 # Changelog
 
-## [NEXT] - 2026-
+## [v1.3.0] - 2026-11-03
 
 -   Fix: serve manifest icons from urls without file extension, so webserver rules for static files don't intercept them
 -   Fix: keep the default favicon when the site icon is not a raster image (e.g. SVG or ICO)

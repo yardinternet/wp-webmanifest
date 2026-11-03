@@ -74,7 +74,7 @@ class WebManifest
 	 * Maskable icons are generated from the site icon, which only works for raster formats.
 	 * Otherwise the default favicon.ico is kept instead of listing icon urls that can't be served.
 	 *
-	 * @since NEXT
+	 * @since 1.3.0
 	 */
 	private function hasSupportedSiteIcon(): bool
 	{

@@ -31,7 +31,7 @@ class MaskableIcon
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.3.0
 	 */
 	public static function supportsMimeType(string $mimeType): bool
 	{

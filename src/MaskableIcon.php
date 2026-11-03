@@ -30,9 +30,9 @@ class MaskableIcon
 	{
 	}
 
-    /**
-     * @since NEXT
-     */
+	/**
+	 * @since NEXT
+	 */
 	public static function supportsMimeType(string $mimeType): bool
 	{
 		return in_array($mimeType, self::SUPPORTED_SOURCE_MIMES, true);

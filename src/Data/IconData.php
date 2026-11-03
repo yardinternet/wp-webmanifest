@@ -41,8 +41,8 @@ class IconData extends Data
 	/**
 	 * Name used in the icon url. Without extension, so webserver rules for static files
 	 * (e.g. nginx locations matching *.png) don't intercept the dynamically generated icon.
-     *
-     * @since NEXT
+	 *
+	 * @since NEXT
 	 */
 	public function getUrlName(): string
 	{

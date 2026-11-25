@@ -9,7 +9,8 @@ Route::get(
 	config('webmanifest.url'),
 	function (WebManifest $webmanifest) {
 		return response($webmanifest->generate(), 200)->
-			header('Content-Type', 'application/json');
+			header('Content-Type', 'application/json')->
+			header('Cache-Control', 'public, max-age=86400');
 	}
 )->name('webmanifest.manifest');
 

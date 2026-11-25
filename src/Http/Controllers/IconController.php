@@ -37,7 +37,9 @@ class IconController extends Controller
 			return $this->dieAndNotFound();
 		}
 
-		return response($icon)->header('Content-Type', MaskableIcon::IMAGE_TYPE['mime']);
+		return response($icon)
+			->header('Content-Type', MaskableIcon::IMAGE_TYPE['mime'])
+			->header('Cache-Control', 'public, max-age=86400');
 	}
 
 	private function parseIconName(string $iconName): ?IconData

@@ -59,3 +59,16 @@ it('returns 404 status when the site icon can not be decoded', function () {
 
 	expect($response->getStatusCode())->toBe(404);
 });
+
+it('lets caches store the icon for a day', function () {
+	WP_Mock::userFunction('get_option')->with('site_icon')->andReturn(1);
+	WP_Mock::userFunction('get_attached_file')->with(1)->andReturn(__DIR__ . '/../fixtures/icons/icon.svg');
+	WP_Mock::userFunction('get_transient')->andReturn(base64_encode('icon'));
+
+	$controller = new IconController(new MaskableIcon(\Intervention\Image\ImageManager::gd()));
+
+	$response = $controller->index('icon_192');
+
+	expect($response->getStatusCode())->toBe(200)
+		->and($response->headers->get('Cache-Control'))->toContain('max-age=86400')->toContain('public');
+});

@@ -1,5 +1,9 @@
 # Changelog
 
+## [NEXT] - 2026-
+
+-   Fix: let caches store the manifest and its icons for a day, instead of generating them on every request
+
 ## [v1.3.0] - 2026-11-03
 
 -   Fix: serve manifest icons from urls without file extension, so webserver rules for static files don't intercept them

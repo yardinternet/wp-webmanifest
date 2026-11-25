@@ -1,6 +1,6 @@
 # Changelog
 
-## [NEXT] - 2026-
+## [v1.3.1] - 2026-11-25
 
 -   Fix: let caches store the manifest and its icons for a day, instead of generating them on every request
 
